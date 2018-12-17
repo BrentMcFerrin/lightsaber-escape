@@ -1,0 +1,20 @@
+{
+  "name": "lightsaber-escape-clone",
+  "version": "0.0.1",
+  "description": "A crappy attempt at cloning Google's Lightsaber Escape Demo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brent McFerrin",
+  "license": "ISC",
+  "dependencies": {
+    "browserify-middleware": "^8.1.1",
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "ngrok": "^3.1.0",
+    "simple-peer": "^9.2.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
+  }
+}

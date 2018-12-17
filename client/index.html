@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Lightsaber Escape</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+
+	<link rel="stylesheet" href="client.css" type="text/css">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+	<div id="viewport"></div>
+
+	<div id="main-menu-ui" class="ui-overlay">
+
+		<div class="background-image">		
+		</div>
+
+		<div class="main-title">
+				<h2>LIGHTSABER</h2>
+				<h1>ESCAPE</h1>
+				<h3>Inspired by Google. Built by Brent McFerrin.</h3>
+		</div>
+
+		<div class="how-to-start">
+			<i class="material-icons phone-icon">smartphone</i>
+			<div class="details">
+				<p>To begin, visit</p>
+				<p><i><a id="phoneUrl" href="https://experiments.withgoogle.com/lightsaber-escape">here</a></i></p>
+				<p>on your phone</p>
+			</div>			
+		</div>
+
+		<div class="footer">
+
+		</div>
+		
+		<!-- <p>Control a lightsaber with your phone</p>
+		<p><i>Inspired by Google Experiments: <a href="https://experiments.withgoogle.com/lightsaber-escape">here</a></i></p> -->
+
+		<!-- <ul id="messages"></ul>
+		<form action="#" id="msg-form">
+			<label>Enter message</label>
+			<input type="text" name="lname" id="msg-box" size="40">
+		</form>
+		<br /> -->
+
+		<!-- <button id="private" disabled="true">Go private</button> -->
+		<!-- <span style="color: red;" id="upgrade-msg"></span>
+
+		<button id="calibrate">Calibrate</button> -->
+
+		<!-- <button onclick="screen.orientation.unlock()"">
+				Unlock
+			</button>
+			<button onclick="
+		 screen.orientation.lock('portrait')">
+			Lock to portrait
+		</button>
+		<button id="fullscreen">
+			Fullscreen
+		</button>
+
+		<h2>Messages</h2>
+		<ul id="msg-list"></ul> -->
+
+	</div>
+
+	<div id="instruction-ui" class="ui-overlay force-hide">
+		<div>CALIBRATE</div>
+		<div>To activate your lightsaber you must first calibrate your phone</div>
+		<div>
+				<div>SOME-IMAGE</div>
+				<div>1. HOLD PHONE</div>
+				<div>Hold your phone vertically with both hands</div>
+		</div>
+		<div>
+				<div>SOME-IMAGE</div>
+				<div>2. PRESS INITIATE</div>
+				<div>Press 'initiate' on your phone to calibrate</div>
+		</div>
+		
+	</div>
+
+
+	<!-- third party -->
+	<script src="third-party/three.min.js"></script>
+	<script src="third-party/DeviceOrientationControls.js"></script>
+
+	<!-- mine -->
+	<script src="/js/viewerBundle.js"></script>
+</body>
+
+</html>
