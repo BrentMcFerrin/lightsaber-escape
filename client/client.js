@@ -27,6 +27,7 @@ let _lightsaberControls = null; // new LightsaberControls(_lightsaber);
 // Elements
 const mainMenuUi = document.getElementById('main-menu-ui');
 const instructionUi = document.getElementById('instruction-ui');
+const loadingUi = document.getElementById('loading-ui');
 // const privateButton = document.getElementById('private')
 // const calibrateButton = document.getElementById('calibrate')
 // const form = document.getElementById('msg-form')
@@ -44,7 +45,7 @@ function setupUi() {
       // hide this element
       phoneUrl.classList.add("force-hide");
     } else {
-      const url = '82714424.ngrok.io/' + _connectionManager.connectionId;
+      const url = '00185c34.ngrok.io/' + _connectionManager.connectionId;
       phoneUrl.href = 'http://' + url;
       phoneUrl.innerHTML = url;
     }    
@@ -59,7 +60,9 @@ function setupUi() {
         showCalibrateInstructions();
         break;
       case ControlType.CALIBRATED:
-        hideMainUi();
+        showLoading();
+        setTimeout(() => hideMainUi(), 5000); // simulate loading 3d stuff
+        // hideMainUi();
         break;
       case ControlType.ON:
         break;
@@ -102,6 +105,7 @@ function setupUi() {
 
 function hideMainUi() {
   // mainMenuUi.style.display = 'none';
+  loadingUi.classList.add("force-hide");
   mainMenuUi.classList.add("force-hide");
   instructionUi.classList.add("force-hide");
 }
@@ -111,6 +115,10 @@ function showCalibrateInstructions() {
   instructionUi.classList.remove("force-hide");
 }
 
+function showLoading() {
+  console.log('Showing Loading UI...');
+  loadingUi.classList.remove("force-hide");
+}
 
 
 // socket.on('connect', function() {

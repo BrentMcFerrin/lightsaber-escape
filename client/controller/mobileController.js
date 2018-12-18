@@ -22,16 +22,15 @@ let _sceneManager = new SceneManager(_viewportContainer, width, height);
 let _meshProvider = new MeshProvider();
 
 let _lightsaber = _meshProvider.getLightsaber();
-let _lightsaberControls = null; // new LightsaberControls(_lightsaber);
+let _lightsaberControls = null;
 
 // Elements
-const privateButton = document.getElementById('private')
-const calibrateButton = document.getElementById('calibrate')
-// const form = document.getElementById('msg-form')
-// const box = document.getElementById('msg-box')
-// const boxFile = document.getElementById('msg-file')
-// const msgList = document.getElementById('msg-list')
-// const upgradeMsg = document.getElementById('upgrade-msg')
+const initiateButton = document.getElementById('initiate');
+const calibrateButton = document.getElementById('calibrate');
+const loader = document.getElementById('hex-loader');
+const headingTitle = document.getElementById('heading-title');
+const headingSubTitle = document.getElementById('heading-sub-title');
+const headingDetails = document.getElementById('heading-details');
 
 setupUi();
 function setupUi() {
@@ -42,7 +41,7 @@ function setupUi() {
       // hide this element
       phoneUrl.classList.add("force-hide");
     } else {
-      const url = 'http://82714424.ngrok.io/' + _connectionManager.connectionId;
+      const url = 'http://00185c34.ngrok.io/' + _connectionManager.connectionId;
       phoneUrl.href = url;
       phoneUrl.innerHTML = url;
     }    
@@ -51,11 +50,32 @@ function setupUi() {
   _sceneManager.addObjectToScene(_lightsaber);
   _lightsaberControls = new LightsaberControls(_lightsaber);
 
+  _connectionManager.addListener(DataType.CONTROL, controlData => {
+    switch(controlData) {
+      case ControlType.CONNECTED:
+        break;
+      case ControlType.CALIBRATED:
+        setTimeout(() => {
+          headingTitle.style.display = 'block';
+          headingTitle.innerHTML = 'CALIBRATION COMPLETE';
+
+          headingSubTitle.style.display = 'block';
+          headingSubTitle.innerHTML = 'You\'re ready to begin your escape';
+          
+          headingDetails.style.display = 'block';
+          initiateButton.style.display = 'none';
+        }, 2000);
+        break;
+      case ControlType.ON:
+        break;
+      case ControlType.OFF:
+        break;
+    }
+  });
+
   _connectionManager.addListener(DataType.ORIENTATION, orientation => 
     _lightsaberControls.setOrientation(orientation)
   );
-
-  // var controls = new THREE.DeviceOrientationControls( _lightsaber, true );
 
   calibrateButton.addEventListener('click', function (e) {
     _lightsaberControls.setInitialOrientation();    
@@ -66,7 +86,6 @@ function setupUi() {
 
     if (playerId) {
       _lightsaberControls.update();
-      // socket.emit('peer-msg', _lightsaberControls.orientation());
       _connectionManager.sendOrientationData(_lightsaberControls.orientation());
     } else {
       _sceneManager.render();
@@ -75,147 +94,46 @@ function setupUi() {
   };
   animate();
 
-  // window.addEventListener('deviceorientation', function(e) {
-  //   var gammaRotation = e.gamma ? e.gamma * (Math.PI / 600) : 0;
-  //   _lightsaber.rotation.y = gammaRotation;
-  // });
-
-  privateButton.disabled = false;
+  initiateButton.disabled = false;
 }
 
-
-
-
-
-// socket.on('connect', function() {
-//   console.log('Connected to signalling server, Peer ID: %s', socket.id);
-//   privateButton.disabled = false;
-// });
-
-// socket.on('peer-msg', function (rotation) {
-//   if(location.hash === '#1') {
-//     console.log('orientation data = \n', rotation);
-//     // var rotation = JSON.parse(data);
-//     _lightsaber.rotation.x = rotation.x;
-//     _lightsaber.rotation.y = rotation.y;
-//     _lightsaber.rotation.z = rotation.z;
-//   } else {
-//     // peer.send("hello, my lord");
-//   }
-//   // var li = document.createElement('li')
-//   // li.appendChild(document.createTextNode(data.textVal))
-//   // msgList.appendChild(li)
-// });
-
-// socket.on('peer', function(data) { // go private
-//   var peerId = data.peerId;
-//   // var peer = new Peer({ initiator: data.initiator, trickle: useTrickle });
-//   var peer = new Peer({ initiator: location.hash === '#1', trickle: useTrickle });
-
-//   console.log('Peer available for connection discovered from signalling server, Peer ID: %s', peerId);
-
-//   socket.on('signal', function(data) {
-//     if (data.peerId == peerId) {
-//       console.log('Received signalling data', data, 'from Peer ID:', peerId);
-//       peer.signal(data.signal);
-//     }
-//   });
-
-//   peer.on('signal', function(data) {
-//     console.log('Advertising signalling data', data, 'to Peer ID:', peerId);
-//     socket.emit('signal', {
-//       signal: data,
-//       peerId: peerId
-//     });
-//   });
-//   peer.on('error', function(e) {
-//     console.log('Error sending connection to peer %s:', peerId, e);
-//   });
-//   peer.on('connect', function() {
-//     console.log('Peer connection established');
-//     goPrivate();
-//     if(location.hash === '#1') {
-//       peer.send("hi, bitch");
-//     } else {
-//       peer.send("hello, my lord");
-//     }
-//   });
-//   peer.on('data', function(data) {
-//     var string = new TextDecoder("utf-8").decode(data);
-//     console.log('Recieved data from peer:', string);
-//     var li = document.createElement('li')
-//     li.appendChild(document.createTextNode(string))
-//     msgList.appendChild(li)
-//   });
-//   peers[peerId] = peer;
-//   me = peer;
-// });
-
-// form.addEventListener('submit', function (e, d) {
-//   e.preventDefault()
-//   var li = document.createElement('li')
-//   li.appendChild(document.createTextNode(box.value))
-//   msgList.appendChild(li)
-//   if (boxFile && boxFile.value !== '') {
-//     var reader = new window.FileReader()
-//     reader.onload = function (evnt) {
-//       socket.emit('peer-file', {file: evnt.target.result})
-//     }
-//     reader.onerror = function (err) {
-//       console.error('Error while reading file', err)
-//     }
-//     reader.readAsArrayBuffer(boxFile.files[0])
-//   } else {
-//     if (me) {
-//       me.send(box.value);
-//     } else {
-//       socket.emit('peer-msg', {textVal: box.value});
-//     }    
-//   }
-//   box.value = ''
-//   boxFile.value = ''
-// });
-
-privateButton.addEventListener('click', function (e) {
-  goPrivate();
-  console.log('going private...');
+initiateButton.addEventListener('click', function (e) {
+  initiateButton.disabled = true;
+  console.log('connecting to view...');
   // socket.emit('go-private', true);
   _connectionManager.startConnection();
   _lightsaberControls.setInitialOrientation();
+
+  // requestFullScreen();
+  
+  loader.classList.add('calibrate');
+
+  headingTitle.style.display = 'none';
+  headingSubTitle.style.display = 'none';
+  initiateButton.style.display = 'none';
+
 });
-
-function goPrivate () {
-  // upgradeMsg.innerHTML = 'WebRTC connection established!';
-  privateButton.disabled = true;
-}
-
-
 
 // // fullscreen
 // var fullscreenButton = document.getElementById('fullscreen')
 // fullscreenButton.addEventListener('click', function (e) {
 //   requestFullScreen();
 // });
-// function requestFullScreen() {
 
-//   var el = document.body;
+function requestFullScreen() {
+  var el = document.body;
+  // Supports most browsers and their versions.
+  var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen 
+  || el.mozRequestFullScreen || el.msRequestFullScreen;
 
-//   // Supports most browsers and their versions.
-//   var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen 
-//   || el.mozRequestFullScreen || el.msRequestFullScreen;
-
-//   if (requestMethod) {
-
-//     // Native full screen.
-//     requestMethod.call(el);
-
-//   } else if (typeof window.ActiveXObject !== "undefined") {
-
-//     // Older IE.
-//     var wscript = new ActiveXObject("WScript.Shell");
-
-//     if (wscript !== null) {
-//       wscript.SendKeys("{F11}");
-//     }
-//   }
-// }
+  if (requestMethod) {
+    // Native full screen.
+    requestMethod.call(el);
+  } else if (typeof window.ActiveXObject !== "undefined") {
+    // Older IE.
+    var wscript = new ActiveXObject("WScript.Shell");
+    if (wscript !== null) {
+      wscript.SendKeys("{F11}");
+    }
+  }
+}

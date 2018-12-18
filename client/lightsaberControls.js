@@ -30,8 +30,8 @@ function lightsaberControls(lightsaberMesh) {
     _initialOrientationData.y = _lightsaberMesh.rotation.y;
     _initialOrientationData.z = _lightsaberMesh.rotation.z;
 
-    screen.orientation.lock();
-    screen.lockOrientation("portrait-primary");
+    // screen.orientation.lock();
+    // screen.lockOrientation("portrait-primary");
   }
 
   function setOrientation(orientation) {

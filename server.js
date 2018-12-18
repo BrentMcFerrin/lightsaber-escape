@@ -22,8 +22,8 @@ app.get('/:id', (req, res) => {
 });
 
 // app.get('/js/bundle.js', browserify(['debug', 'lodash', 'socket.io-client', 'simple-peer', {'./client.js': {run: true}}]));
-app.get('/js/viewerBundle.js', browserify(['debug', 'socket.io-client', 'simple-peer', {'./client/client.js': {run: true}}]));
-app.get('/js/controllerBundle.js', browserify(['debug', 'socket.io-client', 'simple-peer', {'./client/controller/mobileController.js': {run: true}}]));
+app.get('/js/viewerBundle.js', browserify(['socket.io-client', 'simple-peer', {'./client/client.js': {run: true}}]));
+app.get('/js/controllerBundle.js', browserify(['socket.io-client', 'simple-peer', {'./client/controller/mobileController.js': {run: true}}]));
 
 io.on('connection', function (socket) {
   console.log('Connection with ID:', socket.id);
