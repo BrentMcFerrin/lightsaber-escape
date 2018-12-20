@@ -45,7 +45,8 @@ function setupUi() {
       // hide this element
       phoneUrl.classList.add("force-hide");
     } else {
-      const url = '00185c34.ngrok.io/' + _connectionManager.connectionId;
+      // const url = '00185c34.ngrok.io/' + _connectionManager.connectionId;
+      const url = 'brentm.xyz/lightsaber?id=' + _connectionManager.connectionId;
       phoneUrl.href = 'http://' + url;
       phoneUrl.innerHTML = url;
     }    
