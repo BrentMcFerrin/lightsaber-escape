@@ -19,9 +19,9 @@ let height = window.innerHeight
 
 let _viewportContainer = document.getElementById('viewport');
 let _sceneManager = new SceneManager(_viewportContainer, width, height);
-let _meshProvider = new MeshProvider();
+let _meshProvider = new MeshProvider(true);
 
-let _lightsaber = _meshProvider.getLightsaber();
+let _lightsaber = null; //_meshProvider.getLightsaber();
 let _lightsaberControls = null; // new LightsaberControls(_lightsaber);
 
 // Elements
@@ -49,10 +49,18 @@ function setupUi() {
       phoneUrl.href = 'http://' + url;
       phoneUrl.innerHTML = url;
     }    
-  }  
+  }
 
-  _sceneManager.addObjectToScene(_lightsaber);
-  _lightsaberControls = new LightsaberControls(_lightsaber);
+  // testing
+  // setTimeout(() => {
+  //   // load the lightsaber model
+  //   _lightsaber = _meshProvider.getLightsaber();
+  //   _sceneManager.addObjectToScene(_lightsaber);
+  //   _lightsaberControls = new LightsaberControls(_lightsaber);
+  // }, 3000);
+
+  // _sceneManager.addObjectToScene(_lightsaber);
+  // _lightsaberControls = new LightsaberControls(_lightsaber);
 
   _connectionManager.addListener(DataType.CONTROL, controlData => {
     switch(controlData) {
@@ -63,6 +71,12 @@ function setupUi() {
         showLoading();
         setTimeout(() => hideMainUi(), 5000); // simulate loading 3d stuff
         // hideMainUi();
+
+        // load the lightsaber model
+        _lightsaber = _meshProvider.getLightsaber();
+        _sceneManager.addObjectToScene(_lightsaber);
+        _lightsaberControls = new LightsaberControls(_lightsaber);
+
         break;
       case ControlType.ON:
         break;
@@ -83,6 +97,11 @@ function setupUi() {
 
   var animate = function () {
     requestAnimationFrame( animate );
+
+    // testing
+    // if (_lightsaber) {
+    //   _lightsaber.rotation.z += 0.01;
+    // }
 
     if (playerId) {
       _lightsaberControls.update();

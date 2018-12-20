@@ -21,7 +21,7 @@ let _viewportContainer = document.getElementById('viewport');
 let _sceneManager = new SceneManager(_viewportContainer, width, height);
 let _meshProvider = new MeshProvider();
 
-let _lightsaber = _meshProvider.getLightsaber();
+let _lightsaber = _meshProvider.getDummyModel();
 let _lightsaberControls = null;
 
 // Elements

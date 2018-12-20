@@ -46,9 +46,7 @@ function connectionManager(playerId) {
       var peer = new Peer({ initiator: _self.isInitiator, trickle: _useTrickle });
       // var peer = new Peer({ initiator: location.hash === '#1', trickle: _useTrickle });
     
-      console.log('Peer available for connection discovered from signalling server, Peer ID: %s', peerId);
-
-      
+      console.log('Peer available for connection discovered from signalling server, Peer ID: %s', peerId);      
     
       _socket.on('signal', function(data) {
         if (data.peerId == peerId) {
@@ -57,8 +55,10 @@ function connectionManager(playerId) {
         }
       });
     
+      // initiator will auto have some signal data to send to others
       peer.on('signal', function(data) {
         console.log('Advertising signalling data', data, 'to Peer ID:', peerId);
+        // instead of sending this data to socket, send to http API?
         _socket.emit('signal', {
           playerId: _self.connectionId,
           signal: data,
