@@ -149,13 +149,13 @@ function setupUi() {
       _keyboardControls.update();
       _sceneManager.render();
 
-      // debug:
-      debugCameraInfo.innerHTML = 
-        `x: ${_sceneManager.getMainCamera().position.x}`
-        + "<br />" +
-        `y: ${_sceneManager.getMainCamera().position.y}`
-        + "<br />" +
-        `z: ${_sceneManager.getMainCamera().position.z}`;
+      // // debug:
+      // debugCameraInfo.innerHTML = 
+      //   `x: ${_sceneManager.getMainCamera().position.x}`
+      //   + "<br />" +
+      //   `y: ${_sceneManager.getMainCamera().position.y}`
+      //   + "<br />" +
+      //   `z: ${_sceneManager.getMainCamera().position.z}`;
       
     }
 
