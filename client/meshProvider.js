@@ -6,6 +6,7 @@ function meshProvider(autoLoad) {
 
   // private variables
   const _objLoader = new THREE.OBJLoader();
+  const _fbxLoader = new THREE.FBXLoader();
 
   let _lightsaber = null;
 
@@ -63,9 +64,12 @@ function meshProvider(autoLoad) {
     // var aoMap = textureLoader.load( 'content/models/lightsaber/texture/diffuse_color.png' );
     // var displacementMap = textureLoader.load( 'content/models/lightsaber/texture/diffuse_color.png' );
 
+    var armsAlbedo = textureLoader.load( 'content/models/arms/textures/Diffuse_map.png' );
+    var armsNormal = textureLoader.load( 'content/models/arms/textures/Normal_map.png' );
+
     // material
     // const material = new THREE.MeshBasicMaterial( { color: 0xffffff } ); // for bloom
-    const material = new THREE.MeshStandardMaterial( {
+    const lightsaberMaterial = new THREE.MeshStandardMaterial( {
       map: albedo,
       roughnessMap: roughnessMap,
       metalnessMap: metalMap,
@@ -92,19 +96,87 @@ function meshProvider(autoLoad) {
       shading: THREE.SmoothShading
     } );
 
-    _objLoader.load(
+    const armsMaterial = new THREE.MeshStandardMaterial( {
+      map: armsAlbedo,
+      // roughnessMap: roughnessMap,
+      // metalnessMap: metalMap,
+      normalMap: armsNormal,
+      // emissive: new THREE.Color( 0xffffff ),
+      // // emissive: new THREE.Color( 0x00bfff ),
+      // // emissiveMap: emissionMap,
+      // emissiveIntensity: 1000,
+
+      // aoMap: aoMap,
+      // color: 0x888888,
+      roughness: 0.5, // settings.roughness,
+      metalness: 0.1, // settings.metalness,
+      // normalMap: normalMap,
+      normalScale: new THREE.Vector2( 1, - 1 ), // why does the normal map require negation in this case?      
+      aoMapIntensity: 1,
+      // displacementMap: displacementMap,
+      // displacementScale: settings.displacementScale,
+      // displacementBias: - 0.428408, // from original model
+      // envMap: reflectionCube,
+      envMapIntensity: settings.envMapIntensity,
+      side: THREE.DoubleSide,
+
+      shading: THREE.SmoothShading
+    } );
+
+    const energyMaterial = new THREE.MeshStandardMaterial( {
+      // emissive: new THREE.Color( 0xffffff ),
+      emissive: new THREE.Color( 0x00bfff ),
+      // emissiveMap: emissionMap,
+      emissiveIntensity: 1000,
+    } );
+
+    _fbxLoader.load(
       // resource URL
-      'content/models/lightsaber/lightsaber.obj',
+      'content/models/lightsaber/hands-lightsaber-2.fbx',
       // called when resource is loaded
-      function ( object ) {    
+      function ( object ) {
+
+        var testMaterial = new THREE.MeshBasicMaterial( { color: 0x555555 } ); // for bloom
+        object.children[ 0 ].material = armsMaterial;
+        object.children[ 1 ].children[ 0 ].material = lightsaberMaterial;
+        object.children[ 1 ].children[ 1 ].material = energyMaterial;
+
+        _lightsaber = object;
+        _lightsaber.scale.multiplyScalar( 0.05 );
+        _lightsaber.rotation.x = (Math.PI / 2); // 90 degrees
+        _lightsaber.rotation.z = Math.PI; // 180 degress
+
+        // _lightsaber.position.y = -2.0;
+        
+        return;
+
         // scene.add( object );
         // object.scale.set(0.1, 0.1, 0.1);
         // _lightsaber = object;
         // onLoaded(object);
 
-        var geometry = object.children[ 0 ].geometry;
-        _lightsaber = new THREE.Mesh( geometry, material );
-        _lightsaber.scale.multiplyScalar( 0.1 );
+        // Object3D.DefaultUp - that is, ( 0, 1, 0 )
+
+        var armsGeometry = object.children[ 0 ].geometry;
+        var handleGeometry = object.children[ 1 ].children[ 0 ].geometry;
+        var energyGeometry = object.children[ 1 ].children[ 1 ].geometry;
+
+        
+        var armsMesh = new THREE.Mesh( armsGeometry, testMaterial );
+
+        var handleMesh = new THREE.Mesh( handleGeometry, lightsaberMaterial );
+        // handleMesh.rotation.x = 90;
+        var energyMesh = new THREE.Mesh( energyGeometry, lightsaberMaterial );
+        // energyMesh.rotation.x = 90;
+        // energyMesh.scale.multiplyScalar( 0.1 );
+
+        var lightsaber = new THREE.Group();
+        lightsaber.add( armsMesh );
+        lightsaber.add( handleMesh );
+        lightsaber.add( energyMesh );
+
+        _lightsaber = lightsaber;
+        _lightsaber.scale.multiplyScalar( 0.0001 );
       },
       // called when loading is in progresses
       function ( xhr ) {    
@@ -115,6 +187,31 @@ function meshProvider(autoLoad) {
         console.log( 'An error happened' );    
       }
     );
+
+    // _objLoader.load(
+    //   // resource URL
+    //   'content/models/lightsaber/lightsaber.obj',
+    //   // called when resource is loaded
+    //   function ( object ) {    
+    //     // scene.add( object );
+    //     // object.scale.set(0.1, 0.1, 0.1);
+    //     // _lightsaber = object;
+    //     // onLoaded(object);
+
+    //     var geometry = object.children[ 0 ].geometry;
+    //     _lightsaber = new THREE.Mesh( geometry, material );
+    //     _lightsaber.scale.multiplyScalar( 0.1 );
+    //   },
+    //   // called when loading is in progresses
+    //   function ( xhr ) {    
+    //     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );    
+    //   },
+    //   // called when loading has errors
+    //   function ( error ) {    
+    //     console.log( 'An error happened' );    
+    //   }
+    // );
+
   }
 }
 

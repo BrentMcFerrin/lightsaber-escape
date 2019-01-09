@@ -5,6 +5,8 @@ const MeshProvider = require('./meshProvider');
 const { DataType, ControlType } = require('./models');
 const UrlUtils = require('./utils/urlUtils');
 
+const KeyboardControls = require('./keyboardControls');
+
 // let playerId = (location.pathname+location.search).substr(1).split('/')[0];
 let playerId = UrlUtils.getParams()['id'];
 let _connectionManager = new ConnectionManager(playerId);
@@ -24,10 +26,15 @@ let _meshProvider = new MeshProvider(true);
 let _lightsaber = null; //_meshProvider.getLightsaber();
 let _lightsaberControls = null; // new LightsaberControls(_lightsaber);
 
+let _keyboardControls = new KeyboardControls(_sceneManager.getMainCamera());
+
 // Elements
 const mainMenuUi = document.getElementById('main-menu-ui');
 const instructionUi = document.getElementById('instruction-ui');
 const loadingUi = document.getElementById('loading-ui');
+
+const debugCameraInfo = document.getElementById('debug-camera-info');
+
 // const privateButton = document.getElementById('private')
 // const calibrateButton = document.getElementById('calibrate')
 // const form = document.getElementById('msg-form')
@@ -53,12 +60,15 @@ function setupUi() {
   }
 
   // testing
-  // setTimeout(() => {
-  //   // load the lightsaber model
-  //   _lightsaber = _meshProvider.getLightsaber();
-  //   _sceneManager.addObjectToScene(_lightsaber);
-  //   _lightsaberControls = new LightsaberControls(_lightsaber);
-  // }, 3000);
+  setTimeout(() => {
+    // load the lightsaber model
+    _lightsaber = _meshProvider.getLightsaber();
+    _lightsaber.position.y = 3.6;
+    _lightsaber.position.z = -0.35;
+
+    _sceneManager.addObjectToScene(_lightsaber);
+    _lightsaberControls = new LightsaberControls(_lightsaber);
+  }, 3000);
 
   // _sceneManager.addObjectToScene(_lightsaber);
   // _lightsaberControls = new LightsaberControls(_lightsaber);
@@ -96,20 +106,57 @@ function setupUi() {
   //   _lightsaberControls.setInitialOrientation();    
   // });
 
+  var _lightsaberIsOn = true;
+  var _lightsaberScale = 0.0;
+  var _lightsaberInitialScale = -1;
+
   var animate = function () {
     requestAnimationFrame( animate );
 
     // testing
-    // if (_lightsaber) {
-    //   _lightsaber.rotation.z += 0.01;
-    // }
+    if (_lightsaber) {
+      // _lightsaber.rotation.x -= 0.01;
+      // _lightsaber.rotation.y += 0.01;
+      // _lightsaber.rotation.z += 0.01;
+
+      if(_lightsaberInitialScale == -1) { //_lightsaber.children[ 1 ].children[ 1 ].scale != 0.0) {
+        // _lightsaberIsOn = false;
+        // _lightsaber.children[ 1 ].children[ 1 ].scale.multiplyScalar( 0.0 );
+
+        _lightsaberInitialScale = _lightsaber.children[ 1 ].children[ 1 ].scale.x;
+      }
+      
+      _lightsaber.children[ 1 ].children[ 1 ].scale.set( _lightsaberScale, _lightsaberScale, _lightsaberScale );
+      if(_lightsaber.children[ 1 ].children[ 1 ].scale.x > _lightsaberInitialScale) {
+        if(_lightsaberIsOn) {
+          _lightsaberIsOn = false;
+          setTimeout(() => {
+            _lightsaberScale = 0.0;
+            _lightsaberIsOn = true;
+          }, 3000);   
+        }
+             
+      } else {
+        _lightsaberScale += 0.1;
+      }      
+    }
 
     if (playerId) {
       _lightsaberControls.update();
       // socket.emit('peer-msg', _lightsaberControls.orientation());
       _connectionManager.sendOrientationData(_lightsaberControls.orientation());
     } else {
+      _keyboardControls.update();
       _sceneManager.render();
+
+      // debug:
+      debugCameraInfo.innerHTML = 
+        `x: ${_sceneManager.getMainCamera().position.x}`
+        + "<br />" +
+        `y: ${_sceneManager.getMainCamera().position.y}`
+        + "<br />" +
+        `z: ${_sceneManager.getMainCamera().position.z}`;
+      
     }
 
   };

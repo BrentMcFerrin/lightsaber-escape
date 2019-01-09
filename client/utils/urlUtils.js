@@ -9,6 +9,4 @@ const UrlUtils = {
   }
 }
 
-
-
 module.exports = UrlUtils;

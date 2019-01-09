@@ -1,0 +1,19 @@
+#debug-ui {
+
+}
+
+.debug-info-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 8px;
+}
+
+#debug-camera-info {
+  font-size: 0.8em;
+}

@@ -19,6 +19,7 @@ function sceneManager(viewportContainer, width, height) {
   // public methods 
   this.addObjectToScene = addObjectToScene;
   this.render = render;
+  this.getMainCamera = getMainCamera;
 
   // method definitions
   _init();
@@ -70,12 +71,19 @@ function sceneManager(viewportContainer, width, height) {
     _composer.render();
   }
 
+  function getMainCamera() {
+    return _camera;
+  }
+
   function _createCamera(width, height) {
 
-    var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 5;
-    camera.position.y = 4;
+    var camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
+    // var camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 1000);
+    camera.position.z = 0; //0.35; // back
+    camera.position.y = 4; // up
     camera.position.x = 0;
+
+    camera.up = THREE.Object3D.DefaultUp;
   
     return camera;
   }

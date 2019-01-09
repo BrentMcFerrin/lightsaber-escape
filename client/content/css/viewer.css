@@ -239,6 +239,20 @@ body {
     left: 5px;
     height: 13px; }
 
+.debug-info-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 8px; }
+
+#debug-camera-info {
+  font-size: 0.8em; }
+
 .background-image {
   background: url("/content/images/main_background2.jpg");
   background-size: cover;

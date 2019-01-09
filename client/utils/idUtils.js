@@ -3,7 +3,7 @@ const IdUtils = {
     length = length || 10;
   
     let id = "";
-    const characterList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characterList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; // 0123456789";
   
     for (var i = 0; i < length; i++) {
       id += characterList.charAt(Math.floor(Math.random() * characterList.length));
